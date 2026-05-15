@@ -32,12 +32,10 @@ if (!form) {
     const name = target.name;
     if (!name) return;
 
-    // trim edges and update formData
+    // trim leading spaces only for the live object, save trimmed values to storage
     const value = target.value.trimStart();
-    // We only trim trailing and leading for storage when saving; keep user's caret behavior
-    formData = { ...formData, [name]: value };
+    formData[name] = value;
 
-    // Save trimmed values (no leading/trailing spaces) to localStorage
     const toSave = { email: formData.email.trim(), message: formData.message.trim() };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
   });
@@ -60,7 +58,8 @@ if (!form) {
 
     // Clear storage, formData and form fields
     localStorage.removeItem(STORAGE_KEY);
-    formData = { email: '', message: '' };
+    formData.email = '';
+    formData.message = '';
     form.reset();
   });
 }
